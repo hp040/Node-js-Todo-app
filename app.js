@@ -3,6 +3,16 @@ var bodyParser=require('body-parser');
 var data=[{task:"get up"}];
 var app=express();
 var port=process.env.PORT||1337;
+var mongoose=require('mongoose');
+//db-connect
+mongoose.connect('mongodb://root:hp040%40898@ds059682.mlab.com:59682/to_do', {useNewUrlParser: true});
+//create schema
+var todoSchema = new mongoose.Schema({
+    task:String
+});
+
+var Todo = mongoose.model('Todo', todoSchema);
+
 app.set("view engine",'ejs');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
@@ -10,21 +20,36 @@ app.use(bodyParser.urlencoded({extended:false}));
 app.use('/assets/',express.static('./assets/'));
 
 app.get('/',function(re,rs,ne){
-    rs.render('todo',{todos: data});
+    var hp = mongoose.model('Todo').find(function(err,data){
+        //console.log(data);
+        rs.render('todo',{todos:data });
+    });
+    
+    
 });
 
 app.post('/create',function(re,rs){
     
-    data.push(re.body);
-    rs.json(data);
+   var hp= Todo(re.body).save(function(err,data){
+        if (err) throw err;
+        //console.log('saved');
+        rs.json(data);
+        
+    });
+    
+    
+    
+    
 });
 
 app.delete('/del/:ts',function(re,rs){
-    data=data.filter(function(todo){
-        
-        return todo.task.replace(/ /g, '-') !==re.params.ts;
+
+    Todo.find({task:re.params.ts}).deleteOne(function(err,data){
+        if(err) throw err;
+        rs.json(data);
     });
-    rs.json(data);
+    
+    
 });
 
 app.listen(port);

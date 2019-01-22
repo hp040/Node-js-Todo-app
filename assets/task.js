@@ -15,7 +15,7 @@ $(document).ready(function(){
     });
 
     $('li').on('click',function(){
-        var data=$(this).text().replace(/ /g,'-');
+        var data=$(this).text();
         $.ajax({type:'DELETE',
             url:'/del/'+data,
             success:function(resp){
