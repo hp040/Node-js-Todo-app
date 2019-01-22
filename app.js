@@ -2,7 +2,7 @@ var express=require('express');
 var bodyParser=require('body-parser');
 var data=[{task:"get up"}];
 var app=express();
-var port=process.env.port||1337;
+var port=process.env.PORT||1337;
 app.set("view engine",'ejs');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
