@@ -1,6 +1,6 @@
 var express=require('express');
 var bodyParser=require('body-parser');
-var data=[{task:"get up"}];
+
 var app=express();
 var port=process.env.PORT||1337;
 var mongoose=require('mongoose');
@@ -43,8 +43,8 @@ app.post('/create',function(re,rs){
 });
 
 app.delete('/del/:ts',function(re,rs){
-
-    Todo.find({task:re.params.ts}).deleteOne(function(err,data){
+    var del=decodeURIComponent(decodeURI(re.params.ts));
+    Todo.find({task:del}).deleteOne(function(err,data){
         if(err) throw err;
         rs.json(data);
     });
