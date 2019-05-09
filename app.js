@@ -5,7 +5,7 @@ var app=express();
 var port=process.env.PORT||1337;
 var mongoose=require('mongoose');
 //db-connect
-mongoose.connect('mongodb://root:hp040%40898@ds059682.mlab.com:59682/to_do', {useNewUrlParser: true});
+mongoose.connect('your mongodb COnnection ', {useNewUrlParser: true});
 //create schema
 var todoSchema = new mongoose.Schema({
     task:String
@@ -21,7 +21,7 @@ app.use('/assets/',express.static('./assets/'));
 
 app.get('/',function(re,rs,ne){
     var hp = mongoose.model('Todo').find(function(err,data){
-        //console.log(data);
+        
         rs.render('todo',{todos:data });
     });
     
@@ -32,7 +32,7 @@ app.post('/create',function(re,rs){
     
    var hp= Todo(re.body).save(function(err,data){
         if (err) throw err;
-        //console.log('saved');
+        
         rs.json(data);
         
     });
